@@ -26,7 +26,7 @@ frames = [cv2.imread("frames/frame-0.png", cv2.IMREAD_COLOR),
 
 frames_size = len(frames)
 
-model = build_model(False)
+model = build_model(True)
 
 total_frames = 2000
 frames_count = 0

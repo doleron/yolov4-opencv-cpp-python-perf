@@ -30,7 +30,7 @@ int main(int, char **)
     const int frames_size = frames.size();
 
     cv::dnn::Net net;
-    load_net(net, false);
+    load_net(net, true);
 
     auto model = cv::dnn::DetectionModel(net);
     model.setInputParams(1./255, cv::Size(416, 416), cv::Scalar(), true);
