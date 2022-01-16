@@ -4,7 +4,7 @@ This repository is intended to investigating the overall performance of YOLOV4 d
 
 ## I'm getting different performances
 
-The experiment is pretty straight forward: running YOLOV4 dnn detection 1000 times over 4 different images:
+The experiment is pretty straight forward: running YOLOV4 dnn detection 2000 times over 4 different images:
 
 ```python
 frames = ...
