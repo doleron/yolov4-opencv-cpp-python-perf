@@ -15,6 +15,43 @@ for i in range(2000):
 
 For some unknown reason, I'm getting a significant faster performances when I run this code in Python if compared to the same code in C++ with CUBA enabled. Using only the CPU, both codes take same time.
 
+## Fix / Solution
+
+As user @Micka pointed out in this [question on stackoverflow](https://stackoverflow.com/questions/70731065/opencv-dnn-yolo-v4-with-cuda-in-python-is-5x-faster-than-the-same-code-in-c), the problem was in the CUDA/CPU setup:
+
+```c++
+void load_net(cv::dnn::Net &net, bool is_cuda) {
+    auto result = cv::dnn::readNetFromDarknet("config_files/yolo" + YOLO_VERSION + ".cfg", "config_files/yolo" + YOLO_VERSION + ".weights");
+    if (is_cuda) {
+        std::cout << "Attempty to use CUDA\n";
+        net.setPreferableBackend(cv::dnn::DNN_BACKEND_CUDA);
+        net.setPreferableTarget(cv::dnn::DNN_TARGET_CUDA_FP16);
+    } else {
+        std::cout << "Running on CPU\n";
+        net.setPreferableBackend(cv::dnn::DNN_BACKEND_OPENCV);
+        net.setPreferableTarget(cv::dnn::DNN_TARGET_CPU);
+    }
+    net = result;
+}
+```
+The `net` variable isn't a loaded model at all at that time. The fix is achieved by replacing `net` by `result` as follows:
+
+```c++
+void load_net(cv::dnn::Net &net, bool is_cuda) {
+    auto result = cv::dnn::readNetFromDarknet("config_files/yolo" + YOLO_VERSION + ".cfg", "config_files/yolo" + YOLO_VERSION + ".weights");
+    if (is_cuda) {
+        std::cout << "Attempty to use CUDA\n";
+        result.setPreferableBackend(cv::dnn::DNN_BACKEND_CUDA);
+        result.setPreferableTarget(cv::dnn::DNN_TARGET_CUDA_FP16);
+    } else {
+        std::cout << "Running on CPU\n";
+        result.setPreferableBackend(cv::dnn::DNN_BACKEND_OPENCV);
+        result.setPreferableTarget(cv::dnn::DNN_TARGET_CPU);
+    }
+    net = result;
+}
+```
+
 ## Running with CUDA
 
 Running it on my machine (Intel I9, NVIDIA RTX 2080) with CUBA enabled I get:
