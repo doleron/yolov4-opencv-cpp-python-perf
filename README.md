@@ -108,6 +108,13 @@ Ubuntu 20.04.3 LTS
 
 ### General configuration for OpenCV 4.5.3 
 
+The foloowing output was obtained from the following command:
+
+```
+std::cout << cv::getBuildInformation() << std::endl;
+
+```
+
   Version control:               4.5.3
 
   Extra modules:
