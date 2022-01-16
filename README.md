@@ -8,7 +8,7 @@ The experiment is pretty straight forward: running YOLOV4 dnn detection 1000 tim
 
 ```python
 frames = ...
-for i in range(1000):
+for i in range(2000):
     frame = frames[i % 4]
     model.detect(frame, .2, .4)
 ```
@@ -32,8 +32,8 @@ Which give me 333 FPS. However, if I execute the counterpart code in C++:
 
 ```c++
 frames = ...
-for(int i = 0; i < total_frames; ++i) {
-    const cv::Mat & frame = frames[i % frames_size];
+for(int i = 0; i < 2000; ++i) {
+    const cv::Mat & frame = frames[i % 4];
     model.detect(frame, classIds, confidences, boxes, .2, .4);
 }
 ```
